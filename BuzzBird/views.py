@@ -7,19 +7,39 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
+from .forms import PostForm
+from django.utils import timezone
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @ensure_csrf_cookie
 def home(request):
     posts = PostModel.objects.all().order_by('-time_posted')
-    if request.method != 'POST':
+    form = PostForm()
+
+    if request.method == 'GET':
+        form = PostForm(request.GET)
+
+    elif request.method != 'POST':
+        print("yes")
         return render(request, "authenticate/home.html", {
             "posts": posts,
         })
     elif request.method == 'POST':
-        return redirect("home")
-    return render(request, "authenticate/home.html", {})
+        form = PostForm(request.POST)
+        if form.is_valid():
+            new_post = form.save(commit=False)
+            new_post.username_id = request.user.id
+            new_post.save()
+            messages.success(request, "Posted")
+            return redirect("home")
+        messages.success(request, "Posted")
+        return redirect('home')
+    context = {
+        'form': form,
+        'posts': posts,
+    }
+    return render(request, "authenticate/home.html",context)
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])

@@ -13,16 +13,17 @@
     {% if user.is_authenticated %}
     <h1>Welcome {{user}}</h1>
     <div class="container">
-        <form method='POST' class="row g-3 needs-validation" novalidate action='{% url 'home' %}'>
+        <form method='POST' class="row g-3 needs-validation" novalidate action='{% url 'home' %}' enctype='multipart/form-data'>
             {% csrf_token %}
             <div class="col-md-4">
               <div class="input-group has-validation">
-                <input type="text" class="form-control" name="post" placeholder="Say anything you want!" aria-describedby="inputGroupPrepend" required>
+                {% comment %} <div class="form-control" name="username" aria-describedby="inputGroupPrepend"> {% endcomment %}
+                {{form}}
               </div>
             </div>
             <div class="col-12">
               <button class="btn btn-primary" type="submit">Post</button>
-            </div>
+            </div> 
           </form></div>
           {% else %}
           <div class="col-12">
