@@ -16,12 +16,10 @@ from django.utils import timezone
 def home(request):
     posts = PostModel.objects.all().order_by('-time_posted')
     form = PostForm()
-
     if request.method == 'GET':
         form = PostForm(request.GET)
 
     elif request.method != 'POST':
-        print("yes")
         return render(request, "authenticate/home.html", {
             "posts": posts,
         })
@@ -93,7 +91,6 @@ def signup(request):
     return render(request, "authenticate/signup.html", {})
 
 
-
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @ensure_csrf_cookie
 def signout(request):
@@ -101,3 +98,25 @@ def signout(request):
     messages.success(request,"Logged out")
     return redirect('signin')
 
+
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@ensure_csrf_cookie
+def search(request):
+    if request.method == 'POST':
+        searched_username =  request.POST.get('username')
+    elif request.method == 'GET':
+        searched_username = request.user
+    posts = PostModel.objects.filter(username__username=searched_username).values().order_by('-time_posted')
+    number_of_posts = len(posts)
+    return render(request, "authenticate/profile.html", {
+        'posts': posts,
+        'number_of_posts': number_of_posts,
+        'username': searched_username
+    })        
+
+
+
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@ensure_csrf_cookie
+def delete_post(request):
+    pass

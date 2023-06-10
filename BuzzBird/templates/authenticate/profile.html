@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="text-align: center;">
+<h1>Username: {{username}}</h1>
+<h6>Number of posts: {{number_of_posts}}</h6>
+</div>
+<hr class="my-4">
+<section class="vh-100" style="background-color: white;">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+        <h1 style="text-align: center;">My Posts</h1></br>
+        <div class="card mb-5" style="border-radius: 15px;">
+          {% for post in posts %}
+          <div class="card-body p-4">
+            <h3 class="mb-3">{{post.body}}</h3>
+            <h6 class="mb-3">{{post.time_posted}}</h6>
+            <div class="d-flex justify-content-start align-items-center">
+              <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
+                  class="text-muted small">Delete Post</span></p>
+            </div>
+            <hr class="my-4">
+          </div>
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

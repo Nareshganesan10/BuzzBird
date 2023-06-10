@@ -23,6 +23,10 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'signout' %}">Logout</a>
               </li>
+             <li class="nav-item">
+                <a class="nav-link active" aria-current="page" name="username" href='{% url 'search' %}'>My Profile</a>
+              </li>
+              </form>
             </ul>
             {% else %}
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -34,8 +38,9 @@
               </li>
             </ul>
             {% endif %}
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search People" aria-label="Search">
+            <form class="d-flex" role="search" method='POST' action="{% url 'search' %}">
+              {% csrf_token %}
+              <input class="form-control me-2" type="search" placeholder="Search People" aria-label="Search" name="username">
               <button class="btn btn-outline-primary" type="submit">Search</button>
             </form>
           </div>
@@ -46,3 +51,8 @@
 {% block content %}
 {% endblock content %}
 </div>
+<footer class="bg-light text-center text-lg-start">
+  <div class="text-center p-3" style="background-color: white;">
+    © 2020 Copyright
+  </div>
+</footer>
