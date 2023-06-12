@@ -18,7 +18,7 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            {% if user.is_authenticated %}
+            {% if request.user.is_authenticated %}
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'signout' %}">Logout</a>
@@ -53,6 +53,6 @@
 </div>
 <footer class="bg-light text-center text-lg-start">
   <div class="text-center p-3" style="background-color: white;">
-    © 2020 Copyright
+    © 2023 Copyright BuzzBird
   </div>
 </footer>

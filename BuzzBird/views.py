@@ -9,6 +9,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .forms import PostForm
 from django.utils import timezone
+from BuzzBird.models import FollowModel
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
@@ -52,8 +53,8 @@ def signin(request):
             messages.success(request,"Logged in")
             return redirect('home')
         else:
-            messages.success("incorrect username or password")
-            return redirect(request,'home')
+            messages.success(request, "incorrect username or password")
+            return redirect('home')
     return render(request, "authenticate/signin.html", {})
 
 
@@ -107,11 +108,20 @@ def search(request):
     elif request.method == 'GET':
         searched_username = request.user
     posts = PostModel.objects.filter(username__username=searched_username).values().order_by('-time_posted')
+    #following_values = People the user is following
+    following_values = list(FollowModel.objects.filter(username=str(request.user)).values_list('follows', flat=True))
+    #follower_values = The people that follows the user
+    follower_values = list(FollowModel.objects.filter(follows=str(request.user)).values_list('username', flat=True))
     number_of_posts = len(posts)
+    print(following_values)
+    print(follower_values)
     return render(request, "authenticate/profile.html", {
+        'user': str(request.user),
         'posts': posts,
         'number_of_posts': number_of_posts,
-        'username': searched_username
+        'username': searched_username,
+        'following': following_values,
+        'followers': follower_values,
     })        
 
 
@@ -120,3 +130,14 @@ def search(request):
 @ensure_csrf_cookie
 def delete_post(request):
     pass
+
+
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@ensure_csrf_cookie
+def follow(request, username):
+    if request.user.is_authenticated:
+        user = User.objects.filter(username=username).first()
+        follow = FollowModel.objects.create(follows=str(user), username=str(request.user), follower=None)
+        follow.save()
+        messages.success(request, "You are following" + str(username))
+    return redirect('search') 

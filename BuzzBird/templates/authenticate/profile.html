@@ -4,8 +4,16 @@
 <div class="container" style="text-align: center;">
 <h1>Username: {{username}}</h1>
 <h6>Number of posts: {{number_of_posts}}</h6>
+{% if user == username%}
+<div class="col-12">
+  <a button class="btn btn-primary" type="submit" href='{% url "home" %}'>Post Something?!</button></a>
 </div>
-<hr class="my-4">
+{% else %}
+<div class="col-12">
+  <a button class="btn btn-primary" type="submit" href='{% url "follow" username %}'>Follow</button></a>
+</div>
+{% endif %}
+</div>
 <section class="vh-100" style="background-color: white;">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col col-xl-10">
@@ -23,6 +31,37 @@
           </div>
           {% endfor %}
       </div>
+      <div class="accordion" id="accordionPanelsStayOpenExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+              You are following
+            </button>
+          </h2>
+          <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+              {% for user in following %}
+              <strong>{{user}}</strong></br>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+              Your followers
+            </button>
+          </h2>
+          <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              {% for user in followers %}
+              <strong>{{user}}</strong></br>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     </div>
   </div>
 </section>
