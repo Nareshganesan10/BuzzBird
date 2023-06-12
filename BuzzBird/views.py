@@ -102,8 +102,16 @@ def signout(request):
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @ensure_csrf_cookie
-def delete_post(request):
-    pass
+def delete_post(request, post_id):
+    if request.user.is_authenticated:
+        post = PostModel.objects.get(post_id=post_id)
+        post.delete()
+        messages.success(request, "Post deleted succesfully")
+        return redirect('home')
+    # else:
+    #     messages.success(request, "Post deleted succesfully")
+
+
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @ensure_csrf_cookie

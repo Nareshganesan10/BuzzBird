@@ -30,9 +30,10 @@
             <h3 class="mb-3">{{post.body}}</h3>
             <h6 class="mb-3">{{post.time_posted}}</h6>
             <div class="d-flex justify-content-start align-items-center">
-              <p class="mb-0 text-uppercase"><i class="fas fa-cog me-2"></i> <span
-                  class="text-muted small">Delete Post</span></p>
-            </div>
+              <div class="col-12">
+                <a button class="btn btn-primary" type="submit" href='{% url "delete_post" post.post_id %}'>Delete Post</button></a>
+              </div>
+          </div>
             <hr class="my-4">
           </div>
           {% endfor %}
@@ -48,7 +49,7 @@
             <div class="accordion-body">
               {% for user in following %}
               {% if user %}
-              <strong>{{user}}</strong></br>
+              <strong a href>{{user}}</strong></br>
               {% else %}
               <strong>You have no followers yet!!!</strong></br>
               {% endif %}
