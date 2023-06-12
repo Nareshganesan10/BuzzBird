@@ -102,6 +102,11 @@ def signout(request):
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @ensure_csrf_cookie
+def delete_post(request):
+    pass
+
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@ensure_csrf_cookie
 def search(request):
     if request.method == 'POST':
         searched_username =  request.POST.get('username')
@@ -113,8 +118,7 @@ def search(request):
     #follower_values = The people that follows the user
     follower_values = list(FollowModel.objects.filter(follows=str(request.user)).values_list('username', flat=True))
     number_of_posts = len(posts)
-    print(following_values)
-    print(follower_values)
+    # is_currentuser_already_following = 
     return render(request, "authenticate/profile.html", {
         'user': str(request.user),
         'posts': posts,
@@ -123,13 +127,6 @@ def search(request):
         'following': following_values,
         'followers': follower_values,
     })        
-
-
-
-@api_view(['GET', 'POST', 'PUT', 'DELETE'])
-@ensure_csrf_cookie
-def delete_post(request):
-    pass
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
@@ -141,3 +138,10 @@ def follow(request, username):
         follow.save()
         messages.success(request, "You are following" + str(username))
     return redirect('search') 
+
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@ensure_csrf_cookie
+def unfollow(request, username):
+    if request.user.is_authenticated:
+        FollowModel.objects.filter(username=str(request.user), follows=username).delete()
+    return redirect('search')

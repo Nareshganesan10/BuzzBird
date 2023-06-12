@@ -9,4 +9,5 @@ urlpatterns = [
     path("search/", view=views.search, name="search"),
     path("delete_post/<str:username>", view=views.delete_post, name="delete_post"),
     path("follow/<str:username>", view=views.follow, name="follow"),
+    path("unfollow/<str:username>", view=views.unfollow, name="unfollow"),
 ]

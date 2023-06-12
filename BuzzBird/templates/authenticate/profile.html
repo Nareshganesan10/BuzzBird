@@ -4,14 +4,20 @@
 <div class="container" style="text-align: center;">
 <h1>Username: {{username}}</h1>
 <h6>Number of posts: {{number_of_posts}}</h6>
-{% if user == username%}
+{% if user == username or username == request.user%}
 <div class="col-12">
   <a button class="btn btn-primary" type="submit" href='{% url "home" %}'>Post Something?!</button></a>
 </div>
 {% else %}
+{% if username not in following %}
 <div class="col-12">
   <a button class="btn btn-primary" type="submit" href='{% url "follow" username %}'>Follow</button></a>
 </div>
+{% else %}
+<div class="col-12">
+  <a button class="btn btn-primary" type="submit" href='{% url "unfollow" username %}'>Unfollow</button></a>
+</div>
+{% endif %}
 {% endif %}
 </div>
 <section class="vh-100" style="background-color: white;">
@@ -41,7 +47,11 @@
           <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
             <div class="accordion-body">
               {% for user in following %}
+              {% if user %}
               <strong>{{user}}</strong></br>
+              {% else %}
+              <strong>You have no followers yet!!!</strong></br>
+              {% endif %}
               {% endfor %}
             </div>
           </div>
@@ -55,7 +65,11 @@
           <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
             <div class="accordion-body">
               {% for user in followers %}
+              {% if user %}
               <strong>{{user}}</strong></br>
+              {% elif user is none %}
+              <strong>You have no followers yet!!!</strong></br>
+              {% endif %}
               {% endfor %}
             </div>
           </div>
