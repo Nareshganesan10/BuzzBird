@@ -28,7 +28,7 @@ def home(request):
         form = PostForm(request.POST)
         if form.is_valid():
             new_post = form.save(commit=False)
-            new_post.username_id = request.user.id
+            new_post.username = request.user
             new_post.save()
             messages.success(request, "Posted")
             return redirect("home")
@@ -54,7 +54,7 @@ def signin(request):
             return redirect('home')
         else:
             messages.success(request, "incorrect username or password")
-            return redirect('home')
+            return redirect('signin')
     return render(request, "authenticate/signin.html", {})
 
 
@@ -120,7 +120,7 @@ def search(request):
         searched_username =  request.POST.get('username')
     elif request.method == 'GET':
         searched_username = request.user
-    posts = PostModel.objects.filter(username__username=searched_username).values().order_by('-time_posted')
+    posts = PostModel.objects.filter(username=searched_username).values().order_by('-time_posted')
     #following_values = People the user is following
     following_values = list(FollowModel.objects.filter(username=str(request.user)).values_list('follows', flat=True))
     #follower_values = The people that follows the user
@@ -153,3 +153,14 @@ def unfollow(request, username):
         FollowModel.objects.filter(username=str(request.user), follows=username).delete()
         messages.success(request, "You have unfollowed " + str(username))
     return redirect('search')
+
+
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@ensure_csrf_cookie
+def all_users(request):
+    if request.method == 'GET':
+        user_list = list(User.objects.all())
+        return render(request, "authenticate/all_users.html", {
+            "user_list": user_list,
+        })
+    return render(request, "authenticate/all_users.html")

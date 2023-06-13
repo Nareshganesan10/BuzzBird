@@ -41,6 +41,11 @@
               </li>
             </ul>
             {% endif %}
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'all_users' %}">All Members</a>
+            </li>
+            </ul>
             <form class="d-flex" role="search" method='POST' action="{% url 'search' %}">
               {% csrf_token %}
               <input class="form-control me-2" type="search" placeholder="Search People" aria-label="Search" name="username">

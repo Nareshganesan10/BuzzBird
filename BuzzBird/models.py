@@ -8,7 +8,8 @@ class PostModel(models.Model):
     post_id = models.AutoField(primary_key=True)
     time_posted = models.DateField(default=timezone.now)
     body = models.TextField()
-    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    username = models.CharField(max_length=50)
+    # username_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return(self.body)
