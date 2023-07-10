@@ -84,11 +84,9 @@ def signup(request):
                     messages.success(request,"Logged in")
                     return redirect('home')
                 return redirect('signup')
-                messages.success(request,"Error with the data, please verufy once again")
         else:
             messages.success(request,"password and Password confirmation did not match")
             return redirect('signup')
-    messages.success(request,"Error with the data, please verufy once again")
     return render(request, "authenticate/signup.html", {})
 
 
@@ -104,13 +102,14 @@ def signout(request):
 @ensure_csrf_cookie
 def delete_post(request, post_id):
     if request.user.is_authenticated:
+        confimation = messages.error(request, "Are you sure?, You cannot get this post back")
+        return render(request, "messages.html", {
+        "messages": confimation,
+        })
         post = PostModel.objects.get(post_id=post_id)
         post.delete()
-        messages.success(request, "Post deleted succesfully")
-        return redirect('home')
-    # else:
-    #     messages.success(request, "Post deleted succesfully")
 
+    return redirect('home')
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
@@ -126,6 +125,8 @@ def search(request):
     #follower_values = The people that follows the user
     follower_values = list(FollowModel.objects.filter(follows=str(request.user)).values_list('username', flat=True))
     number_of_posts = len(posts)
+    number_of_followers = len(follower_values)
+    number_of_following = len(following_values)
     return render(request, "authenticate/profile.html", {
         'user': str(request.user),
         'posts': posts,
@@ -133,6 +134,8 @@ def search(request):
         'username': searched_username,
         'following': following_values,
         'followers': follower_values,
+        'number_of_followers': number_of_followers,
+        'number_of_following': number_of_following,
     })        
 
 

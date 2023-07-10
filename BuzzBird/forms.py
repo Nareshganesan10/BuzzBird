@@ -3,6 +3,7 @@ from django import forms
 from django.forms import ModelForm
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 class PostForm(ModelForm):
     body = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={
